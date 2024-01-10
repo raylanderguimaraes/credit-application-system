@@ -1,6 +1,7 @@
 package com.raylander.credit.applicationsystem.service.impl
 
 import com.raylander.credit.applicationsystem.entity.Customer
+import com.raylander.credit.applicationsystem.exception.BusinessException
 import com.raylander.credit.applicationsystem.repository.CustomerRepository
 import com.raylander.credit.applicationsystem.service.ICustomerService
 import org.springframework.stereotype.Service
@@ -13,12 +14,13 @@ class CustomerService(private val customerRepository: CustomerRepository) : ICus
 
     override fun findById(id: Long): Customer {
         return this.customerRepository.findById(id).orElseThrow(){
-            throw RuntimeException("Id $id is not found")
+            throw BusinessException("Id $id is not found")
         }
     }
 
     override fun deleteById(id: Long) {
-        this.customerRepository.deleteById(id)
+        val customer: Customer = this.findById(id)
+        this.customerRepository.delete(customer)
     }
 
 }

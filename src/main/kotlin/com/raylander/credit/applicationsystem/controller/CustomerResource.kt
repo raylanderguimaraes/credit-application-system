@@ -5,6 +5,7 @@ import com.raylander.credit.applicationsystem.dto.CustomerUpdateDto
 import com.raylander.credit.applicationsystem.dto.CustomerView
 import com.raylander.credit.applicationsystem.entity.Customer
 import com.raylander.credit.applicationsystem.service.impl.CustomerService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -23,7 +25,7 @@ class CustomerResource(
     private val customerService: CustomerService
 ) {
     @PostMapping
-    fun saveCustomer(@RequestBody customerDto: CustomerDto): ResponseEntity<String> {
+    fun saveCustomer(@RequestBody @Valid customerDto: CustomerDto): ResponseEntity<String> {
         val savedCustomer = this.customerService.save(customerDto.toEntity())
         return ResponseEntity.status(HttpStatus.CREATED).body("Customer ${savedCustomer.email} saved!")
     }
@@ -35,6 +37,7 @@ class CustomerResource(
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deleteCostumer(@PathVariable id: Long) {
         this.customerService.deleteById(id)
     }
@@ -42,7 +45,7 @@ class CustomerResource(
     @PatchMapping
     fun updateCustomer(
         @RequestParam(value = "costumerId") id: Long,
-        @RequestBody customerUpdateDto: CustomerUpdateDto
+        @RequestBody @Valid customerUpdateDto: CustomerUpdateDto
     ): ResponseEntity<CustomerView> {
         val customer: Customer = this.customerService.findById(id)
         val customerToUpdate: Customer = customerUpdateDto.toEntity(customer)
