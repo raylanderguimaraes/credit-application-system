@@ -1,6 +1,6 @@
 package com.raylander.credit.applicationsystem.dto
 
-import com.raylander.credit.applicationsystem.entity.Adress
+import com.raylander.credit.applicationsystem.entity.Address
 import com.raylander.credit.applicationsystem.entity.Customer
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.NotEmpty
@@ -25,7 +25,7 @@ data class CustomerDto(
         income = this.income,
         email = this.email,
         password = this.password,
-        address = Adress(
+        address = Address(
             zipCode = this.zipCode,
             street = this.street
         )
